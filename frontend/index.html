@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Optimizer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <div class="header-image"></div>  <!-- Base64 image as header -->
+
+        <h1>AI Resume Optimizer</h1>
+
+        <input type="text" id="jobUrlInput" placeholder="Enter job application URL">
+
+        <div class="keyword-section">
+            <label id="keyword_input_header" for="keywordsInput">Extracted & Custom Keywords:</label>
+            <textarea id="keywordsInput" placeholder="Keywords will appear here..." rows="3"></textarea>
+
+            <input type="file" id="resumeInput" accept=".pdf">
+
+            <div class="button-group">
+                <button id="findKeywordsBtn">Find Keywords</button>
+                <button id="optimizeBtn">Optimize</button>
+            </div>
+        </div>
+
+        <div id="statusMessage"></div>
+        <div id="downloadSection"></div>
+    </div>
+
+    <div class="footer">
+        &copy; 2025 Resume Optimizer. All rights reserved.
+    </div>
+
+    <script src="index.js"></script>
+</body>
+</html>

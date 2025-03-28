@@ -1,0 +1,104 @@
+/* Apply the new color scheme */
+:root {
+    --primary-dark: #212A31;
+    --primary-light: #748D92;
+    --accent-blue: #124E66;
+    --light-gray: #D3D9D4;
+    --background: #F7F9FB;
+}
+
+/* General Styling */
+body {
+    font-family: 'Arial', sans-serif;
+    background: var(--background);
+    color: var(--primary-dark);
+    text-align: center;
+    padding: 20px;
+}
+
+/* Centered Container */
+.container {
+    max-width: 600px;
+    margin: auto;
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Heading */
+h1 {
+    color: var(--accent-blue);
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+/* Inputs */
+input {
+    width: 90%;
+    padding: 12px;
+    border: 1px solid var(--primary-light);
+    border-radius: 6px;
+    margin-bottom: 12px;
+}
+
+/* Buttons */
+button {
+    background: var(--accent-blue);
+    color: white;
+    border: none;
+    padding: 12px;
+    width: 48%;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: 0.3s ease;
+}
+
+button:hover {
+    background: var(--primary-dark);
+}
+
+/* Status Message */
+#statusMessage {
+    margin-top: 15px;
+    font-weight: bold;
+    color: var(--primary-dark);
+}
+
+/* Footer */
+.footer {
+    margin-top: 20px;
+    font-size: 12px;
+    color: var(--primary-light);
+}
+
+/* Base64 Image as Header */
+.header-image {
+    background-image: url('https://www.theladders.com/wp-content/uploads/resume-190916-800x450.jpg'); /* Your full base64 string */
+    background-size: cover;
+    height: 150px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+/* Keyword Input Field */
+#keywordsInput {
+    width: 90%; /* Matches input field width */
+    min-height: 100px; /* Default height */
+    max-height: 300px; /* Prevents it from getting too large */
+    padding: 12px;
+    border: 1px solid var(--primary-light); /* Same as input field */
+    border-radius: 6px; /* Matches input field */
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+    color: var(--primary-dark);
+    background: white;
+    resize: none; /* Prevents manual resizing */
+    overflow-y: auto; /* Enables scrolling if text exceeds max height */
+    line-height: 1.5; /* Improves readability */
+    word-wrap: break-word; /* Ensures text wraps */
+    white-space: pre-wrap; /* Preserves line breaks */
+    margin-bottom: 12px;
+}
+
+
