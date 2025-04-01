@@ -13,7 +13,7 @@ document.getElementById("findKeywordsBtn").addEventListener("click", async () =>
     document.getElementById("statusMessage").innerText = "Finding keywords...";
 
     try {
-        const response = await fetch("http://localhost:5000/find-keywords", {
+        const response = await fetch("https://resume-optimizer-hfgk.onrender.com/find-keywords", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json" // ✅ Ensures JSON format
