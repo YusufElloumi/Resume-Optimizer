@@ -12,21 +12,26 @@ console.log(`✅ Server starting on port ${PORT}...`);
 
 async function scrapeJobDescription(url) {
     console.log("🔹 Launching Puppeteer browser...");
-    const browser = await puppeteer.launch({
-        headless: "new", // Ensures latest headless mode
-        args: ["--no-sandbox", "--disable-setuid-sandbox"], // Required for deployment environments
-    });
+    try {
+        const browser = await puppeteer.launch({
+            headless: "new", // Ensures latest headless mode
+            executablePath: puppeteer.executablePath(), // Use Puppeteer’s built-in Chromium
+            args: ["--no-sandbox", "--disable-setuid-sandbox"], // Required for Render deployment
+            userDataDir: "/opt/render/.cache/puppeteer" // Set persistent cache path
+        });
 
-    const page = await browser.newPage();
-    await page.goto(url, { waitUntil: "domcontentloaded" });
+        const page = await browser.newPage();
+        await page.goto(url, { waitUntil: "domcontentloaded" });
 
-    const jobDescription = await page.evaluate(() => {
-        return document.body.innerText;
-    });
+        const jobDescription = await page.evaluate(() => document.body.innerText);
 
-    await browser.close();
-    console.log("✅ Job description scraped successfully.");
-    return jobDescription;
+        await browser.close();
+        console.log("✅ Job description scraped successfully.");
+        return jobDescription;
+    } catch (error) {
+        console.error("❌ Puppeteer failed to launch:", error);
+        throw new Error("Puppeteer launch error");
+    }
 }
 
 app.post("/find-keywords", async (req, res) => {
@@ -41,7 +46,7 @@ app.post("/find-keywords", async (req, res) => {
         console.log("🔹 Scraping job description from:", jobUrl);
         const jobDescription = await scrapeJobDescription(jobUrl);
 
-        // Fake keyword extraction (Replace with actual logic)
+        // Simple keyword extraction (Replace with actual logic)
         const keywords = ["JavaScript", "React", "Node.js", "API"];
 
         res.json({ keywords, jobDescription });
