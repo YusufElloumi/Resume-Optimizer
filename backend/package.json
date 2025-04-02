@@ -20,6 +20,6 @@
     "pdf-lib": "^1.17.1",
     "pdfjs-dist": "^5.0.375",
     "pdfkit": "^0.16.0",
-    "puppeteer": "^24.5.0"
+    "puppeteer": "^21.10.0"
   }
 }

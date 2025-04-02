@@ -15,8 +15,8 @@ async function scrapeJobDescription(url) {
     try {
         const browser = await puppeteer.launch({
             headless: "new", // Use the latest headless mode
-            executablePath: puppeteer.executablePath(), // Auto-detect Puppeteer's built-in Chromium
-            args: ["--no-sandbox", "--disable-setuid-sandbox"], // Required for Render
+            executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || puppeteer.executablePath(), // Force Puppeteer to use its own Chromium
+            args: ["--no-sandbox", "--disable-setuid-sandbox"], // Required for Render deployment
         });
 
         const page = await browser.newPage();
