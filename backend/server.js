@@ -14,10 +14,9 @@ async function scrapeJobDescription(url) {
     console.log("🔹 Launching Puppeteer browser...");
     try {
         const browser = await puppeteer.launch({
-            headless: "new", // Use latest headless mode
-            executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || puppeteer.executablePath(), // Use built-in Chromium
+            headless: "new", // Use the latest headless mode
+            executablePath: puppeteer.executablePath(), // Auto-detect Puppeteer's built-in Chromium
             args: ["--no-sandbox", "--disable-setuid-sandbox"], // Required for Render
-            userDataDir: "/opt/render/.cache/puppeteer" // Persistent cache
         });
 
         const page = await browser.newPage();
