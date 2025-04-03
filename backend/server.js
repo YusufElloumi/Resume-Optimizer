@@ -1,6 +1,12 @@
 import express from "express";
 import cors from "cors";
-import puppeteer from "puppeteer";
+import puppeteer from "puppeteer-extra";
+import StealthPlugin from "puppeteer-extra-plugin-stealth";
+
+puppeteer.use(StealthPlugin()); // Helps bypass bot detection
+
+const CHROME_PATH = "C:\\Users\\yello\\.cache\\puppeteer\\chrome\\win64-134.0.6998.165\\chrome-win64\\chrome.exe";
+
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -10,13 +16,18 @@ app.use(cors());
 
 console.log(`✅ Server starting on port ${PORT}...`);
 
+/**
+ * Scrapes the job description from the given URL.
+ */
 async function scrapeJobDescription(url) {
     console.log("🔹 Launching Puppeteer browser...");
+    let browser;
+    
     try {
-        const browser = await puppeteer.launch({
-            headless: "new", // Use the latest headless mode
-            executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || puppeteer.executablePath(), // Force Puppeteer to use its own Chromium
-            args: ["--no-sandbox", "--disable-setuid-sandbox"], // Required for Render deployment
+        browser = await puppeteer.launch({
+            headless: true, // Ensure headless mode is enabled
+            executablePath: CHROME_PATH, // Use the correct Chrome path
+            args: ["--no-sandbox", "--disable-setuid-sandbox"], // Required for some environments
         });
 
         const page = await browser.newPage();
@@ -24,15 +35,21 @@ async function scrapeJobDescription(url) {
 
         const jobDescription = await page.evaluate(() => document.body.innerText);
 
-        await browser.close();
         console.log("✅ Job description scraped successfully.");
         return jobDescription;
     } catch (error) {
         console.error("❌ Puppeteer failed to launch:", error);
         throw new Error("Puppeteer launch error");
+    } finally {
+        if (browser) {
+            await browser.close();
+        }
     }
 }
 
+/**
+ * Handles the keyword extraction request.
+ */
 app.post("/find-keywords", async (req, res) => {
     try {
         const { jobUrl } = req.body;
