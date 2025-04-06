@@ -12,6 +12,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@puppeteer/browsers": "^2.9.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
@@ -20,8 +21,11 @@
     "pdf-lib": "^1.17.1",
     "pdfjs-dist": "^5.0.375",
     "pdfkit": "^0.16.0",
+    "puppeteer": "^22.15.0",
+    "puppeteer-core": "^21.11.0",
     "puppeteer-extra": "^3.3.4",
     "puppeteer-extra-plugin-stealth": "^2.9.0",
-    "puppeteer-core": "^21.10.0"
+    "tar-fs": "^3.0.8",
+    "ws": "^8.18.1"
   }
 }
