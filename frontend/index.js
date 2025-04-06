@@ -68,7 +68,7 @@ document.getElementById("optimizeBtn").addEventListener("click", async () => {
     statusMessage.innerHTML = "⏳ Optimizing resume...";
 
     try {
-        const response = await fetch("http://localhost:5000/optimize-resume", {
+        const response = await fetch("https://resume-optimizer-hfgk.onrender.com/find-keywords", {
             method: "POST",
             body: formData
         });
