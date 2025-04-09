@@ -1,9 +1,6 @@
 import express from "express";
 import cors from "cors";
-import puppeteer from "puppeteer-extra";
-import StealthPlugin from "puppeteer-extra-plugin-stealth";
-
-puppeteer.use(StealthPlugin()); // Anti-bot evasion
+import puppeteer from "puppeteer";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -18,7 +15,7 @@ async function scrapeJobDescription(url) {
     try {
         const browser = await puppeteer.launch({
             headless: true,
-            args: ["--no-sandbox", "--disable-setuid-sandbox"],
+            args: ["--no-sandbox", "--disable-setuid-sandbox"]
         });
 
         const page = await browser.newPage();
@@ -47,8 +44,9 @@ app.post("/find-keywords", async (req, res) => {
         console.log("🔹 Scraping job description from:", jobUrl);
         const jobDescription = await scrapeJobDescription(jobUrl);
 
-        // Dummy placeholder – replace with real keyword extraction if needed
-        const keywords = ["JavaScript", "React", "Node.js", "API"];
+        // Simple mock keywords (replace with OpenAI logic if needed)
+        const keywords = ["JavaScript", "React", "Internship", "Git"];
+
         res.json({ keywords, jobDescription });
     } catch (error) {
         console.error("❌ Error extracting keywords:", error);
