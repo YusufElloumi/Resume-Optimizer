@@ -12,23 +12,25 @@ console.log(`✅ Server starting on port ${PORT}...`);
 
 async function scrapeJobDescription(url) {
     console.log("🔹 Launching Puppeteer browser...");
+    let browser;
     try {
-        const browser = await puppeteer.launch({
-            headless: "new",
-            args: ["--no-sandbox", "--disable-setuid-sandbox"]
+        // Remove the explicit executablePath so Puppeteer uses its default browser
+        browser = await puppeteer.launch({
+            headless: true,
+            args: ["--no-sandbox", "--disable-setuid-sandbox"],
         });
-
         const page = await browser.newPage();
         await page.goto(url, { waitUntil: "domcontentloaded", timeout: 30000 });
-
         const jobDescription = await page.evaluate(() => document.body.innerText);
-
-        await browser.close();
         console.log("✅ Job description scraped successfully.");
         return jobDescription;
     } catch (error) {
         console.error("❌ Puppeteer failed to launch:", error);
         throw new Error("Puppeteer launch error");
+    } finally {
+        if (browser) {
+            await browser.close();
+        }
     }
 }
 
@@ -36,17 +38,13 @@ app.post("/find-keywords", async (req, res) => {
     try {
         const { jobUrl } = req.body;
         console.log("🔹 Received find-keywords request:", req.body);
-
         if (!jobUrl) {
             return res.status(400).json({ error: "Job URL is required." });
         }
-
         console.log("🔹 Scraping job description from:", jobUrl);
         const jobDescription = await scrapeJobDescription(jobUrl);
-
-        // Simple mock keywords (replace with OpenAI logic if needed)
-        const keywords = ["JavaScript", "React", "Internship", "Git"];
-
+        // Dummy keyword extraction logic:
+        const keywords = ["JavaScript", "React", "Node.js", "API"];
         res.json({ keywords, jobDescription });
     } catch (error) {
         console.error("❌ Error extracting keywords:", error);
