@@ -14,7 +14,7 @@ async function scrapeJobDescription(url) {
     console.log("🔹 Launching Puppeteer browser...");
     try {
         const browser = await puppeteer.launch({
-            headless: true,
+            headless: "new",
             args: ["--no-sandbox", "--disable-setuid-sandbox"]
         });
 
