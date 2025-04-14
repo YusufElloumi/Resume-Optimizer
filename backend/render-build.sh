@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
 npm install
-npx puppeteer install
+node node_modules/puppeteer/install.js
+
