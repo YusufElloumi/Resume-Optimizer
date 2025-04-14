@@ -1,3 +1,5 @@
+const API_BASE = "https://resume-optimizer-hfgk.onrender.com";
+
 document.getElementById("findKeywordsBtn").addEventListener("click", async () => {
     const jobUrl = document.getElementById("jobUrlInput").value.trim();
     const statusMessage = document.getElementById("statusMessage");
@@ -11,7 +13,7 @@ document.getElementById("findKeywordsBtn").addEventListener("click", async () =>
     statusMessage.innerText = "⏳ Finding keywords...";
 
     try {
-        const response = await fetch("/find-keywords", {
+        const response = await fetch(`${API_BASE}/find-keywords`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -72,7 +74,7 @@ document.getElementById("optimizeBtn").addEventListener("click", async () => {
     statusMessage.innerHTML = "⏳ Optimizing resume...";
 
     try {
-        const response = await fetch("/optimize", {
+        const response = await fetch(`${API_BASE}/optimize`, {
             method: "POST",
             body: formData
         });
@@ -80,14 +82,10 @@ document.getElementById("optimizeBtn").addEventListener("click", async () => {
         if (!response.ok) throw new Error("Failed to optimize resume");
 
         const blob = await response.blob();
-        const downloadLink = document.createElement("a");
-        downloadLink.href = URL.createObjectURL(blob);
-        downloadLink.download = "Optimized_Resume.pdf";
         const fileUrl = URL.createObjectURL(blob);
         window.open(fileUrl, "_blank");
 
-
-        statusMessage.innerHTML = "✅ Resume optimized and downloaded!";
+        statusMessage.innerHTML = "✅ Resume optimized and ready to preview!";
     } catch (error) {
         console.error("Error:", error);
         statusMessage.innerHTML = "❌ Failed to optimize resume.";
