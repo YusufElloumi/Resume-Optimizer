@@ -1,49 +1,53 @@
 document.getElementById("findKeywordsBtn").addEventListener("click", async () => {
     const jobUrl = document.getElementById("jobUrlInput").value.trim();
+    const statusMessage = document.getElementById("statusMessage");
+    const keywordInput = document.getElementById("keywordsInput");
 
     if (!jobUrl) {
         alert("Please enter a job application URL!");
         return;
     }
 
-    console.log("🔹 Sending job URL to backend:", jobUrl);
-
-    const requestBody = JSON.stringify({ jobUrl: jobUrl });
-
-    document.getElementById("statusMessage").innerText = "Finding keywords...";
+    statusMessage.innerText = "⏳ Finding keywords...";
 
     try {
-        const response = await fetch("https://resume-optimizer-hfgk.onrender.com/find-keywords", {
+        const response = await fetch("/find-keywords", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json" // ✅ Ensures JSON format
+                "Content-Type": "application/json"
             },
-            body: requestBody
+            body: JSON.stringify({ jobUrl })
         });
 
-        console.log("🔹 Server response status:", response.status);
+        console.log("🔹 Raw response:", response);
 
         if (!response.ok) {
             const errorData = await response.json();
+            console.log("❌ Backend error:", errorData);
             throw new Error(errorData.error || "Failed to extract keywords");
         }
 
         const data = await response.json();
-        console.log("✅ Extracted Keywords:", data.keywords);
+        console.log("✅ Full response data:", data);
+        console.log("✅ Extracted keywords:", data.keywords);
 
-        // ✅ Fill the input field with the extracted keywords
-        document.getElementById("keywordsInput").value = data.keywords;
-        document.getElementById("statusMessage").innerText = "✅ Keywords extracted! You can edit or add more.";
+        if (Array.isArray(data.keywords) && data.keywords.length > 0) {
+            keywordInput.value = data.keywords.join(", ");
+        } else {
+            keywordInput.value = "";
+            console.warn("⚠️ No keywords extracted.");
+        }
 
+        statusMessage.innerText = "✅ Keywords extracted! You can edit or add more.";
     } catch (error) {
         console.error("❌ Error fetching keywords:", error);
-        document.getElementById("statusMessage").innerText = "❌ Failed to find keywords.";
+        statusMessage.innerText = "❌ Failed to find keywords.";
     }
 });
 
 document.getElementById("keywordsInput").addEventListener("input", function () {
-    this.style.height = "auto"; // Reset height
-    this.style.height = (this.scrollHeight) + "px"; // Expand based on content
+    this.style.height = "auto";
+    this.style.height = (this.scrollHeight) + "px";
 });
 
 document.getElementById("optimizeBtn").addEventListener("click", async () => {
@@ -55,7 +59,7 @@ document.getElementById("optimizeBtn").addEventListener("click", async () => {
         alert("Keyword input field is empty! Please enter or find keywords.");
         return;
     }
-    
+
     if (!resumeFile) {
         alert("Please upload your resume (PDF format)!");
         return;
@@ -68,22 +72,22 @@ document.getElementById("optimizeBtn").addEventListener("click", async () => {
     statusMessage.innerHTML = "⏳ Optimizing resume...";
 
     try {
-        const response = await fetch("https://resume-optimizer-hfgk.onrender.com/find-keywords", {
+        const response = await fetch("/optimize", {
             method: "POST",
             body: formData
         });
 
         if (!response.ok) throw new Error("Failed to optimize resume");
 
-        const data = await response.json();
+        const blob = await response.blob();
         const downloadLink = document.createElement("a");
-        downloadLink.href = data.downloadUrl;
-        downloadLink.target = "_blank";
-        downloadLink.innerText = "📥 Download Optimized Resume";
-        
-        document.getElementById("downloadSection").innerHTML = "";
-        document.getElementById("downloadSection").appendChild(downloadLink);
-        statusMessage.innerHTML = "✅ Resume optimized!";
+        downloadLink.href = URL.createObjectURL(blob);
+        downloadLink.download = "Optimized_Resume.pdf";
+        const fileUrl = URL.createObjectURL(blob);
+        window.open(fileUrl, "_blank");
+
+
+        statusMessage.innerHTML = "✅ Resume optimized and downloaded!";
     } catch (error) {
         console.error("Error:", error);
         statusMessage.innerHTML = "❌ Failed to optimize resume.";
